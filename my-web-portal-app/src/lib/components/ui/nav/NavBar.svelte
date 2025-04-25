@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import LightSwitch from '$lib/components/ui/light-switch/LightSwitch.svelte';
+
 	let pages = [
 		{ name: 'Home', path: '/' },
 		{ name: 'Dashboard', path: '/dashboard' },
@@ -8,6 +11,9 @@
 
 <nav class="h-24">
 	{#each pages as page (page.name)}
-		<a href={page.path}>{page.name}</a>
+		<button type="button" on:click={() => goto(page.path)} class="btn preset-tonal-surface">
+			{page.name}
+		</button>
 	{/each}
+	<LightSwitch />
 </nav>
