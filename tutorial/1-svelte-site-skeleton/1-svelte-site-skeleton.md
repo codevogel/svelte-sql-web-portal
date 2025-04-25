@@ -142,6 +142,7 @@ Let's make that Navbar a little more functional, and add links to our other page
 ```
 
 Click on the link for the dashboard page, and we'll navigate to `localhost:5173/dashboard` and see a 404 error pop up in our main content part. 
+
 ![dashboard-404.png](img/dashboard-404.png)
 
 This is actually nice to see:
@@ -156,18 +157,23 @@ Let's create a simple version of the dashboard page.
 
 1. Create a new directory for this route: `src/routes/dashboard`
 2. Create `src/routes/dashboard/+page.svelte` and add some content to it
+   
    ```html
 	Welcome to my dashboard!
 	```
+	
 3. You'll see the page hot reload and serve the expected content:
+
 	![basic-dashboard.png](img/basic-dashboard.png)
 
 Let's do the same for the about page.
 1. Create a new directory for this route: `src/routes/about`
 2. Create `src/routes/about/+page.svelte` and add some content to it
+   
    ```html
 	This is some useful information about me.
 	```
+	
 3. Verify that that page, too, works.
 
 
@@ -332,7 +338,9 @@ We will add a button to the NavBar featuring a little sun icon. This button func
 	```
 
 	Click it and see the page toggle between light and dark mode:
+
 	![darkmode.png](img/darkmode.png)
+
 	![lightmode.png](img/lightmode.png)
 
 Good stuff!

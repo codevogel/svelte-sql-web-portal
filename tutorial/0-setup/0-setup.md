@@ -87,12 +87,14 @@ To explain the above options:
 - **Package manager to install dependencies**: We will be using npm to install our dependencies, as it is a popular package manager for Node.js.
 
 You  should see something like this:
+
 ![create-svelte.png](img/create-svelte.png)
 
 Hurray! The project is created.
 It now lives at `~/work/my-web-portal-app`
 
 Now let's go there so we can install the dependencies using `npm`:
+
 ```bash
 # Change working directory into the project
 cd my-web-portal-app
@@ -100,15 +102,18 @@ cd my-web-portal-app
 npm install
 ```
 
-Now confirm that our web app is now working by running 
+Now confirm that our web app is now working by running:
+
 ```bash
 npm run dev
 ```
 
 You should see your web app is now live at [http://localhost:5173](http://localhost:5173).
+
 ![vite.png](img/vite.png)
 
 Take a look and we should be met with SvelteKit's default page:
+
 ![svelte-default.png](img/svelte-default.png)
 
 You can close the server by hitting CTRL+C in the terminal.
@@ -139,6 +144,7 @@ However, it can also be wise to just opt to run XAMPP on Windows for now, and fi
 3. Start a MySQL server and the Apache web server
     - This gives us access to our database through PHPMyAdmin's web interface. 
 4. Create a new Database in PHPMyAdmin (http://localhost/phpmyadmin). I'll name it `web_portal_db`.
+   
    ![create-db.png](img/create-db.png)
 5. Optionally, set a password on the MySQL server (In the 'User Accounts' section of PHPMyAdmin). Remember to restart the MySQL server afterwards.
 
@@ -182,16 +188,19 @@ However, it can also be wise to just opt to run XAMPP on Windows for now, and fi
 			```
 
 		2.  Start the MySQL server 
-		   ![xampp-manager.png](img/xampp-manager.png)
+		
+		![xampp-manager.png](img/xampp-manager.png)
 		3. Start the Apache web server - this gives us access to our database through PHPMyAdmin's web interface.
 	2. Start all servers through a command instead (mind that this will also start the ProFTPD server, but that doesn't really matter for now)
 	   ```bash
 	   sudo /opt/lampp/lampp start
 		```
 4.  Create a new Database in PHPMyAdmin (http://localhost/phpmyadmin). I'll name it `web_portal_db`.
-   ![create-db.png](img/create-db.png)
+	
+	![create-db.png](img/create-db.png)
 5. Optionally, set a password for your database through PHPMyAdmin User Accounts, or in `/opt/lampp/var/mysql/my.cnf` by uncommenting and changing the highlighted line. Don't forget to restart your server afterwards.
    This is best done using your favourite terminal-based text editor, such as `nano` or `nvim`.
+   
    ![xampp-password.png](img/xampp-password.png)
 
 ## 0.3 - Code Editor
