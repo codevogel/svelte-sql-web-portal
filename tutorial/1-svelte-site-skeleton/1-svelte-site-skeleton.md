@@ -113,7 +113,7 @@ Now, [as we've seen in the interactive tutorial](https://svelte.dev/tutorial/kit
 
 We should see that we now have some semblance of a Navigation bar and a footer, with the main content area growing vertically to accommodate the content. You can verify this by copy-and pasting a bunch of text into `src/routes/+page.svelte`
 
-![[basic-layout.png]]
+![basic-layout.png](img/basic-layout.png)
 
 Cool! Now let's not forget to commit our hard work.
 
@@ -142,7 +142,7 @@ Let's make that Navbar a little more functional, and add links to our other page
 ```
 
 Click on the link for the dashboard page, and we'll navigate to `localhost:5173/dashboard` and see a 404 error pop up in our main content part. 
-![[dashboard-404.png]]
+![dashboard-404.png](img/dashboard-404.png)
 
 This is actually nice to see:
 
@@ -160,7 +160,7 @@ Let's create a simple version of the dashboard page.
 	Welcome to my dashboard!
 	```
 3. You'll see the page hot reload and serve the expected content:
-	![[basic-dashboard.png]]
+	![basic-dashboard.png](img/basic-dashboard.png)
 
 Let's do the same for the about page.
 1. Create a new directory for this route: `src/routes/about`
@@ -332,8 +332,8 @@ We will add a button to the NavBar featuring a little sun icon. This button func
 	```
 
 	Click it and see the page toggle between light and dark mode:
-	![[darkmode.png]]
-	![[lightmode.png]]
+	![darkmode.png](img/darkmode.png)
+	![lightmode.png](img/lightmode.png)
 
 Good stuff!
 
@@ -351,5 +351,5 @@ In this chapter, we have accomplished the following:
 - We have created a basic layout for our web portal, including a header, main content area, and footer.
 - We have added a dark mode toggle to our web portal.
 
-Next up: A prettier NavBar and Footer. See [[2-prettier-skeleton]].
+Next up: A prettier NavBar and Footer. See [2-prettier-skeleton](../2-prettier-skeleton.md).
 
