@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'tailwindcss';
 
 @import '@skeletonlabs/skeleton';
@@ -7,3 +8,7 @@
 @custom-variant dark (&:where([data-mode=dark], [data-mode=dark] *));
 
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
+
+@theme {
+	--font-montserrat: 'Montserrat';
+}
