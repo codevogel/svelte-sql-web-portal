@@ -9,6 +9,7 @@ By the end of this chapter, we will have accomplished the following:
 - Installed the dependencies for our SvelteKit project
 - Started a MySQL server using XAMPP
 - Created a new database through PHPMyAdmin
+- Set up our code editor for development
 ## Requirements to follow along
 
 - A system running a Debian/Ubuntu-based distro
@@ -74,6 +75,16 @@ a CLI, in which you should select the following options:
 - Drizzle client: mysql2
 - Run database locally with docker-compose: No
 - Package manager to install dependencies: npm
+
+To explain the above options:
+- **Template**: We want to use the minimal template, as we will be adding our own components and styles later on.
+- **TypeScript**: We will be using TypeScript for this project, as it is a great way to catch errors early on in the development process.
+- **Plugins**: We will be using [Prettier](https://prettier.io/) (an opinionated code formatter), [eslint](https://eslint.org/) (a static code analysis tool), [tailwindcss](https://tailwindcss.com/) (a CSS framework), and [drizzle](https://orm.drizzle.team/docs/overview) (a Typescript ORM)  for this project. Prettier and ESlint make sure our code is formatted correctly and follows best practices, TailwindCSS is a CSS framework that allows us to write CSS in a more efficient way, and Drizzle is an Object Relational Mapper (ORM) that allows us to interact with our database in a more efficient way. 
+- **Tailwindcss plugins**: We will not be using any TailwindCSS plugins for this project.
+- **Drizzle database**: We will be using MySQL as our database for this project.
+- **Drizzle client**: We will be using the mysql2 client for Drizzle, as it is a popular client for MySQL.
+- **Run database locally with docker-compose**: We will not be using Docker for this project, as we're running a local MySQL server with XAMPP.
+- **Package manager to install dependencies**: We will be using npm to install our dependencies, as it is a popular package manager for Node.js.
 
 You  should see something like this:
 ![[create-svelte.png]]
@@ -183,7 +194,26 @@ However, it can also be wise to just opt to run XAMPP on Windows for now, and fi
    This is best done using your favourite terminal-based text editor, such as `nano` or `nvim`.
    ![[xampp-password.png]]
 
-## 0.3 - Rounding Up
+## 0.3 - Code Editor
+
+Now that we have our web app and database set up, let's set up our code editor.
+
+1. Open your code editor of choice. I'll cover instructions for [Neovim](https://neovim.io/) and [VSCode].
+2. Install extensions for Prettier, ESLint, TailwindCSS, Svelte, and TypeScript.
+    - VSCode:
+        - Open up the Extensions tab, search for the extensions, and install them.
+    - Neovim:
+        - [Kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim) is a great starting point for setting up Neovim with LSP support.
+        - Run :Mason and install 
+            - tailwindcss-language-server
+            - eslint-lsp
+            - prettier
+            - svelte-language-server
+            - typescript-language-server
+3. Verify that your editor is working properly by opening up `src/routes/+page.svelte` and checking that the syntax highlighting works.
+    - ℹ️ Windows/WSL Users: Remember that you can find your project at `\\wsl$\Ubuntu\home\<your-username>\work\my-web-portal-app\` in Windows Explorer.
+
+## 0.4 - Rounding Up
 
 We have accomplished the following:
 - (Setup our WSL environment)
