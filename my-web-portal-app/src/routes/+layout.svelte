@@ -1,15 +1,12 @@
 <script lang="ts">
 	import '../app.css';
+	import NavBar from '$lib/components/ui/nav/NavBar.svelte';
 
 	let { children } = $props();
 </script>
 
 <div class="flex min-h-screen flex-col">
-	<nav class="h-24">
-		<a href="/">Home</a>
-		<a href="/dashboard">Dashboard</a>
-		<a href="/about">About</a>
-	</nav>
+	<NavBar />
 	<main class="flex-grow">
 		{@render children()}
 	</main>
