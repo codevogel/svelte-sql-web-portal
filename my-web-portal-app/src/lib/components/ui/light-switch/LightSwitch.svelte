@@ -10,6 +10,6 @@
 	}
 </script>
 
-<button type="button" on:click={changeDarkMode} class="btn-icon preset-tonal-surface">
+<button type="button" on:click={changeDarkMode} class="btn-icon preset-tonal-surface w-24">
 	<Sun />
 </button>
