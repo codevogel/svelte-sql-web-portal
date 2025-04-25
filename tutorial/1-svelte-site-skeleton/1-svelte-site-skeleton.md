@@ -3,6 +3,11 @@ In this chapter, we set up the site skeleton for our web portal.
 ## Goals
 By the end of this chapter, we will have:
 - Learned about SvelteKit and Svelte.
+    - We will have learned about the `src/app.html` and `src/app.css` files, and how SvelteKit uses them to render our pages.
+    - We will have learned about the `+layout.svelte` and `+page.svelte` files, and how SvelteKit uses them to render our pages.
+    - We will have learned about navigation in SvelteKit using the `goto` function from `$app/navigation`.
+    - We will have used an `each` block to iterate over arrays.
+    - We will have learned about the `on:click` event handler in Svelte, and how to use it to handle events.
 - Installed [Skeleton](https://www.skeleton.dev/), a opiniated solution for generating adaptive design systems.
 - Created a basic HTML structure for the web portal using Skeleton components.
     - The structure includes:
