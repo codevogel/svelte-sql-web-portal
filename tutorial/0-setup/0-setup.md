@@ -1,4 +1,4 @@
-# 0. Setup
+# 0 - Setup
 
 In this chapter, we provide guidance on setting up a development environment so we can start developing the web app.
 ## Goal

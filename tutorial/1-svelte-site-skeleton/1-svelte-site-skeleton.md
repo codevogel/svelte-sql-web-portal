@@ -1,5 +1,5 @@
 In this chapter, we set up the site skeleton for our web portal.
-# 1. Site Skeleton using SvelteKit
+# 1 - Site Skeleton using SvelteKit
 ## Goals
 By the end of this chapter, we will have:
 - Learned about SvelteKit and Svelte.
@@ -364,5 +364,5 @@ In this chapter, we have accomplished the following:
 - We have created a basic layout for our web portal, including a header, main content area, and footer.
 - We have added a dark mode toggle to our web portal.
 
-Next up: A prettier NavBar and Footer. See [2-prettier-skeleton](../2-prettier-skeleton.md).
+Next up: A prettier NavBar and Footer. See [2-prettier-skeleton](../2-prettier-skeleton/2-prettier-skeleton.md).
 
