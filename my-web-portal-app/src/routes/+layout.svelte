@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import NavBar from '$lib/components/ui/nav/NavBar.svelte';
+	import Footer from '$lib/components/ui/footer/Footer.svelte';
 
 	let { children } = $props();
 </script>
@@ -12,5 +13,5 @@
 			{@render children()}
 		</div>
 	</main>
-	<footer class="h-24">Footer</footer>
+	<Footer />
 </div>
