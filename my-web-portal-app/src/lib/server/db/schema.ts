@@ -5,3 +5,5 @@ export const user = mysqlTable('user', {
 	age: int('age'),
 	name: text('name').notNull()
 });
+
+export type User = typeof user.$inferSelect;
