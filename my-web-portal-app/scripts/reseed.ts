@@ -9,8 +9,9 @@ async function reseed_db() {
 
 	const client = mysql.createPool(process.env.DATABASE_URL);
 	const db = drizzle(client, { schema, mode: 'default' });
-	console.log("Reseeding database...");
+	console.log("Resetting database...");
 	await reset(db, schema);
+	console.log("Reseeding database...");
 	await seed(db, schema).refine((f) => ({
 		user: {
 			count: 20,
