@@ -17,15 +17,36 @@ async function reseed_db() {
 			count: 20,
 			columns: {
 				name: f.firstName(),
-				age: f.int({
-					minValue: 18,
-					maxValue: 80,
-				}),
+				createdAt: f.date({ minDate: "2025-01-01", maxDate: "2025-02-01" }),
+				dateOfBirth: f.date({ minDate: "1990-01-01", maxDate: "2000-01-01" }),
 			},
 		},
+		session: {
+			count: 100,
+			columns: {
+				startedAt: f.date({ minDate: "2025-02-01", maxDate: "2025-03-01" }),
+				duration: f.int({ minValue: 0, maxValue: 2 * 60 * 60 }),
+			},
+		},
+		level: {
+			count: 10,
+			columns: {
+				name: f.city(),
+				difficulty: f.int({ minValue: 1, maxValue: 5 }),
+			},
+		},
+		score: {
+			count: 300,
+			columns: {
+				score: f.int({ minValue: 0, maxValue: 2000 }),
+				accuracy: f.number({ minValue: 0, maxValue: 1, precision: 100 }),
+				timeTaken: f.int({ minValue: 0, maxValue: 10 * 60 }),
+			},
+		}
 	}));
+
 	console.log("Database reseeded successfully");
-	client.end();
+	await client.end();
 }
 
 async function main() {
