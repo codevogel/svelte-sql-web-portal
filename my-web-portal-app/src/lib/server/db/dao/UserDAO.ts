@@ -11,5 +11,18 @@ export class UserDAO {
 			.select()
 			.from(user);
 	}
+
+	static async getUserById(id: number): Promise<User> {
+		const result: User | undefined = await db
+			.query
+			.user
+			.findFirst({
+				where: eq(user.id, id)
+			});
+		if (!result) {
+			throw new Error(`User with id ${id} not found`);
+		}
+		return result;
 	}
 }
+
