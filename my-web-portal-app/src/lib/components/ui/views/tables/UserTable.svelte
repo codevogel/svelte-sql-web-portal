@@ -1,25 +1,22 @@
 <script lang="ts">
+	import Table from '$lib/components/ui/views/tables/Table.svelte';
 	import type { User } from '$lib/server/db/schema';
 
-	let { users }: { users: User[] } = $props();
+	let { users: users }: { users: User[] } = $props();
+
+	// Define the columns for the Score table
+	const columns = [
+		{ key: 'name', label: 'Name' },
+		{ key: 'age', label: 'Age' },
+		{ key: 'createdAt', label: 'Created At' }
+	];
+
+	const rows = users.map((user, index) => ({
+		...user,
+		age: Math.abs(new Date(Date.now() - user.dateOfBirth.getTime()).getUTCFullYear() - 1970),
+		createdAt: user.createdAt.toLocaleString(),
+		index: index
+	}));
 </script>
 
-<div class="table-wrap">
-	<table class="table caption-bottom">
-		<caption class="pt-4">A list of users and their age.</caption>
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Age</th>
-			</tr>
-		</thead>
-		<tbody class="[&>tr]:hover:preset-tonal-primary">
-			{#each users as user (user.id)}
-				<tr>
-					<td>{user.name}</td>
-					<td>{user.age}</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
-</div>
+<Table {columns} {rows} caption="A list of users and their age." />
