@@ -3,7 +3,11 @@
 
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton/optional/presets';
+
+@import '@skeletonlabs/skeleton/themes/catppuccin';
 @import '@skeletonlabs/skeleton/themes/cerberus';
+@import '@skeletonlabs/skeleton/themes/vintage';
+@import '@skeletonlabs/skeleton/themes/modern';
 
 @custom-variant dark (&:where([data-mode=dark], [data-mode=dark] *));
 
@@ -11,4 +15,6 @@
 
 @theme {
 	--font-montserrat: 'Montserrat';
+	--h-navbar: calc(var(--spacing) * 24) /* 6rem = 96px */;
+	--text-2xs: 0.7rem;
 }

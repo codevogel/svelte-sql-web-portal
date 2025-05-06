@@ -1,0 +1,50 @@
+<script lang="ts">
+	import type { Score } from '$lib/server/db/schema';
+	import { nl } from 'date-fns/locale';
+	import Chart from '$lib/components/ui/views/chart/Chart.svelte';
+
+	let { scores }: { scores: Score[] } = $props();
+
+	// We sort the scores by createdAt,
+	// then map the x values to the createdAt,
+	// and the y values to the score.
+	const inData = scores
+		.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+		.map((score) => {
+			return {
+				x: score.createdAt,
+				y: score.score
+			};
+		});
+
+	const chartData = {
+		type: 'line',
+		data: {
+			labels: inData.map((score) => score.x),
+			datasets: [
+				{
+					label: 'Score',
+					data: inData.map((score) => score.y)
+				}
+			]
+		},
+		options: {
+			scales: {
+				x: {
+					type: 'time',
+					adapters: {
+						date: {
+							locale: nl
+						}
+					},
+					bounds: 'data'
+				},
+				y: {
+					beginAtZero: true
+				}
+			}
+		}
+	};
+</script>
+
+<Chart type={chartData.type} data={chartData.data} options={chartData.options} />

@@ -1,4 +1,3 @@
-
 import type { PageServerLoad } from './$types';
 import { SessionDAO } from '$lib/server/db/dao/SessionDAO';
 import type { Score, Session, User } from '$lib/server/db/schema';
@@ -18,5 +17,4 @@ export const load: PageServerLoad = async ({ params }) => {
 		user,
 		scores
 	};
-
-}
+};

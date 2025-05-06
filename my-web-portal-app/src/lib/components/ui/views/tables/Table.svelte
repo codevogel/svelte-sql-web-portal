@@ -55,14 +55,14 @@
 	sortRows(); // Initial sort
 </script>
 
-<div class="table-wrap">
-	<table class="table caption-bottom">
+<div class="table-wrap overflow-x-scroll">
+	<table class="text-2xs table caption-bottom">
 		<caption class="pt-4">{caption}</caption>
 		<thead>
 			<tr>
 				{#each columns as column, index (column.key)}
 					<th>
-						<button on:click={() => handleSort(index)}>
+						<button onclick={() => handleSort(index)}>
 							{column.label}
 							{#if sortingColumn === index}
 								{sortDirection > 0 ? '▲' : '▼'}
@@ -81,7 +81,7 @@
 								<button
 									type="button"
 									class="btn preset-outlined-surface-500 min-w-[8ch]"
-									on:click={() => goto(row.url as string)}
+									onclick={() => goto(row.url as string)}
 								>
 									{row[column.key]}
 								</button>

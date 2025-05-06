@@ -21,4 +21,4 @@
 	}));
 </script>
 
-<Table {columns} {rows} caption="A list of users and their age." />
+<Table {columns} {rows} caption="A list of scores in this session." />
