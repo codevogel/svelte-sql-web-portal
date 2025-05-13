@@ -11,5 +11,4 @@ export const load: PageServerLoad = async () => {
 		users,
 		topScores
 	};
-
-}
+};
