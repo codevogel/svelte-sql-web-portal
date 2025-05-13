@@ -1,17 +1,26 @@
 <script lang="ts">
 	import '../app.css';
 	import NavBar from '$lib/components/ui/nav/NavBar.svelte';
-	import Footer from '$lib/components/ui/footer/Footer.svelte';
 
 	let { children } = $props();
 </script>
 
-<div class="flex min-h-screen flex-col">
-	<NavBar />
-	<main class="flex flex-grow justify-center py-4">
-		<div class="max-w-[min(85%,100ch)] flex-grow">
+<div class="grid min-h-screen grid-rows-[auto_1fr_auto]">
+	<!-- Header -->
+	<header>
+		<NavBar />
+	</header>
+	<!-- Page -->
+	<div class="mx-auto grid w-full grid-cols-1">
+		<!-- Sidebar (Left) -->
+		<!-- NOTE: hidden in smaller screen sizes -->
+		<!-- Main -->
+		<main class="col-span-1 space-y-4">
 			{@render children()}
-		</div>
-	</main>
-	<Footer />
+		</main>
+		<!-- Sidebar (Right) -->
+		<!-- NOTE: hidden in smaller screen sizes -->
+	</div>
+	<!-- Footer -->
+	<footer></footer>
 </div>
