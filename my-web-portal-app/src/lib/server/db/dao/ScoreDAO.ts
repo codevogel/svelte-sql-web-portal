@@ -41,12 +41,9 @@ export class ScoreDAO {
 	}
 
 	static async getScoresBySessionId(sessionId: number): Promise<Score[]> {
-		const scores: Score[] = await db
-			.query
-			.score
-			.findMany({
-				where: eq(score.sessionId, sessionId),
-			})
+		const scores: Score[] = await db.query.score.findMany({
+			where: eq(score.sessionId, sessionId)
+		});
 		return scores;
 	}
 }
@@ -57,7 +54,7 @@ export class TopScore {
 	scoreId: number = NaN;
 	levelId: number = NaN;
 	sessionId: number = NaN;
-	score: number | null = NaN;
+	score: number = NaN;
 	accuracy: number = NaN;
 	timeTaken: number = NaN;
 	createdAt: Date = new Date();
