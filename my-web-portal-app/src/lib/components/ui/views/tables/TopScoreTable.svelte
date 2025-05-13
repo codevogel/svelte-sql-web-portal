@@ -4,23 +4,33 @@
 
 	let { topScores }: { topScores: TopScore[] } = $props();
 
-	// Define the columns for the Score table
-	const columns = [
-		{ key: 'name', label: 'Name' },
-		{ key: 'levelId', label: 'Level ID' },
-		{ key: 'score', label: 'Score' },
-		{ key: 'accuracy', label: 'Accuracy' },
-		{ key: 'timeTaken', label: 'Time Taken' },
-		{ key: 'createdAt', label: 'Created At' },
-		{ key: 'sessionId', label: 'Session ID', url: true }
-	];
-
-	const rows = topScores.map((score, index) => ({
-		...score,
-		createdAt: new Date(score.createdAt).toLocaleString(),
-		index: index,
-		url: `dashboard/session/${score.sessionId}`
-	}));
+	const table = $derived({
+		caption:
+			'A list of the top 10 users who have the highest scores.\nClick to view the session in which they achieved it.',
+		columns: [
+			'Ranking',
+			'Name',
+			'Level ID',
+			'Score',
+			'Accuracy',
+			'Time Taken',
+			'Created At',
+			'Session ID'
+		],
+		rows: topScores.map((score: TopScore, index: number) => ({
+			values: [
+				index + 1,
+				score.name,
+				score.levelId,
+				score.score,
+				score.accuracy,
+				score.timeTaken,
+				score.createdAt.toLocaleString(),
+				score.sessionId
+			],
+			url: `/dashboard/session/${score.sessionId}`
+		}))
+	});
 </script>
 
-<Table {columns} {rows} caption="The top 10 users with highest scores" />
+<Table {table} paginationOptions={{ enabled: false }} />

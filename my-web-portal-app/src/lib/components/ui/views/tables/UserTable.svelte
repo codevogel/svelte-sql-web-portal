@@ -1,22 +1,23 @@
 <script lang="ts">
-	import Table from '$lib/components/ui/views/tables/Table.svelte';
 	import type { User } from '$lib/server/db/schema';
 
-	let { users: users }: { users: User[] } = $props();
+	import Table from '$lib/components/ui/views/tables/Table.svelte';
+	import type { TableData } from '$lib/components/ui/views/tables/Table.svelte';
 
-	// Define the columns for the Score table
-	const columns = [
-		{ key: 'name', label: 'Name' },
-		{ key: 'age', label: 'Age' },
-		{ key: 'createdAt', label: 'Created At' }
-	];
+	let { users }: { users: User[] } = $props();
 
-	const rows = users.map((user, index) => ({
-		...user,
-		age: Math.abs(new Date(Date.now() - user.dateOfBirth.getTime()).getUTCFullYear() - 1970),
-		createdAt: user.createdAt.toLocaleString(),
-		index: index
-	}));
+	const table: TableData = $derived({
+		caption: 'A list of users.\nClick to view their profile.',
+		columns: ['Name', 'Age', 'Created At'],
+		rows: users.map((user: User) => ({
+			values: [
+				user.name,
+				Math.abs(new Date(Date.now() - user.dateOfBirth.getTime()).getUTCFullYear() - 1970),
+				user.createdAt.toLocaleDateString()
+			],
+			url: `/dashboard/user/${user.id}`
+		}))
+	});
 </script>
 
-<Table {columns} {rows} caption="A list of users and their age." />
+<Table {table} />

@@ -1,97 +1,107 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { Pagination } from '@skeletonlabs/skeleton-svelte';
+	import { ArrowLeft, ArrowRight, ChevronFirst, ChevronLast, Ellipsis } from 'lucide-svelte';
+
+	export interface TableData {
+		caption?: string;
+		columns: string[];
+		rows: TableRow[];
+	}
+
+	export interface PaginationOptions {
+		enabled?: boolean;
+		page?: number;
+		size?: number;
+		sizePerPage?: number[];
+	}
+
+	export interface TableRow {
+		values: (string | number | null)[];
+		url?: string;
+	}
+
+	const paginationDefaults: PaginationOptions = {
+		enabled: true,
+		page: 1,
+		size: 10,
+		sizePerPage: [5, 10]
+	};
 
 	let {
-		columns,
-		rows,
-		caption
-	}: {
-		columns: {
-			key: string;
-			label: string;
-			url?: boolean;
-		}[];
-		rows: Array<Record<string, unknown>>;
-		caption: string;
-	} = $props();
+		table,
+		paginationOptions = paginationDefaults
+	}: { table: TableData; paginationOptions?: PaginationOptions } = $props();
 
-	let sortingColumn = $state(0);
-	let sortDirection = $state(-1); // 1 for ascending, -1 for descending
+	// State
+	let page = $state(paginationOptions.page ?? paginationDefaults.page!);
+	let size = $state(paginationOptions.size ?? paginationDefaults.size!);
+	let enabled = $state(paginationOptions.enabled ?? paginationDefaults.enabled!);
+	let sizePerPage = $state(paginationOptions.sizePerPage ?? paginationDefaults.sizePerPage!);
 
-	function sortRows() {
-		sortedRows = [...rows].sort((a, b) => {
-			// Sort by the current column
-			const key = columns[sortingColumn].key;
-			const aValue = a[key];
-			const bValue = b[key];
-
-			// Add type safety by handling different types appropriately
-			if (typeof aValue === 'string' && typeof bValue === 'string') {
-				return sortDirection * aValue.localeCompare(bValue);
-			} else if (typeof aValue === 'number' && typeof bValue === 'number') {
-				return sortDirection * (aValue - bValue);
-			} else if (aValue instanceof Date && bValue instanceof Date) {
-				return sortDirection * (aValue.getTime() - bValue.getTime());
-			} else {
-				// Convert to strings as a fallback for other types
-				return sortDirection * String(aValue).localeCompare(String(bValue));
-			}
-		});
-	}
-
-	function handleSort(index: number) {
-		if (sortingColumn === index) {
-			// Toggle sort direction if clicking the same column
-			sortDirection *= -1;
-		} else {
-			// New column, reset to descending
-			sortingColumn = index;
-			sortDirection = -1;
-		}
-		sortRows();
-	}
-
-	let sortedRows = $derived([...rows]);
-	sortRows(); // Initial sort
+	const slicedSource = $derived((source: TableRow[]) =>
+		enabled ? source.slice((page - 1) * size, page * size) : source
+	);
 </script>
 
-<div class="table-wrap">
-	<table class="table caption-bottom">
-		<caption class="pt-4">{caption}</caption>
-		<thead>
-			<tr>
-				{#each columns as column, index (column.key)}
-					<th>
-						<button on:click={() => handleSort(index)}>
-							{column.label}
-							{#if sortingColumn === index}
-								{sortDirection > 0 ? '▲' : '▼'}
-							{/if}
-						</button>
-					</th>
-				{/each}
-			</tr>
-		</thead>
-		<tbody class="[&>tr]:hover:preset-tonal-primary">
-			{#each sortedRows as row (row.index)}
+<section class="space-y-4">
+	<!-- Table -->
+	<div class="table-wrap">
+		<table class="table caption-bottom">
+			{#if table.caption}
+				<caption style="white-space: pre-line">{table.caption}</caption>
+			{/if}
+			<thead>
 				<tr>
-					{#each columns as column (column.key)}
-						<td>
-							{#if column.url}
-								<button
-									type="button"
-									class="btn preset-outlined-surface-500 min-w-[8ch]"
-									on:click={() => goto(row.url as string)}
-								>
-									{row[column.key]}
-								</button>
-							{:else}
-								{row[column.key]}
-							{/if}
-						</td>
+					{#each table.columns as header, index (index)}
+						<th>{header}</th>
 					{/each}
 				</tr>
-			{/each}
-		</tbody>
-	</table>
-</div>
+			</thead>
+			<tbody class="[&>tr]:hover:preset-tonal-primary">
+				{#each slicedSource(table.rows) as row, index (index)}
+					<tr
+						onclick={() => (row.url ? goto(row.url) : null)}
+						class={row.url ? 'cursor-pointer' : ''}
+					>
+						{#each row.values as value, i (i)}
+							<td>{value}</td>
+						{/each}
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
+	{#if enabled}
+		<!-- Footer -->
+		<footer class="flex justify-between">
+			<select
+				name="size"
+				id="size"
+				class="select w-fit max-w-[150px] px-2"
+				value={size}
+				onchange={(e) => (size = Number(e.currentTarget.value))}
+			>
+				{#each sizePerPage as v, i (i)}
+					<option value={v}>{v} Per Page</option>
+				{/each}
+				<option value={table.rows.length}>Show All</option>
+			</select>
+			<!-- Pagination -->
+			<Pagination
+				data={table.rows}
+				{page}
+				onPageChange={(e) => (page = e.page)}
+				pageSize={size}
+				onPageSizeChange={(e) => (size = e.pageSize)}
+				siblingCount={4}
+			>
+				{#snippet labelEllipsis()}<Ellipsis class="size-4" />{/snippet}
+				{#snippet labelNext()}<ArrowRight class="size-4" />{/snippet}
+				{#snippet labelPrevious()}<ArrowLeft class="size-4" />{/snippet}
+				{#snippet labelFirst()}<ChevronFirst class="size-4" />{/snippet}
+				{#snippet labelLast()}<ChevronLast class="size-4" />{/snippet}
+			</Pagination>
+		</footer>
+	{/if}
+</section>
