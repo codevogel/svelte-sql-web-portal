@@ -21,7 +21,7 @@ export class SessionDAO {
 				userId: sessionTable.userId,
 				createdAt: sessionTable.createdAt,
 				duration: sessionTable.duration,
-				username: userTable.name
+				username: userTable.username
 			})
 			.from(sessionTable)
 			.innerJoin(userTable, eq(sessionTable.userId, userTable.id))
@@ -36,11 +36,11 @@ export class SessionDAO {
 				userId: sessionTable.userId,
 				createdAt: sessionTable.createdAt,
 				duration: sessionTable.duration,
-				username: userTable.name
+				username: userTable.username
 			})
 			.from(sessionTable)
 			.innerJoin(userTable, eq(sessionTable.userId, userTable.id))
-			.where(like(userTable.name, `%${name}%`));
+			.where(like(userTable.username, `%${name}%`));
 		return result;
 	}
 

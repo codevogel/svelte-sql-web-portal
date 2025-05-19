@@ -14,8 +14,8 @@
 		{/snippet}
 		{#snippet article()}
 			<div class="grid grid-cols-2">
-				<span>User name:</span>
-				<span>{data.user.name}</span>
+				<span>Username:</span>
+				<span>{data.user.username}</span>
 				<span>Session started:</span>
 				<span>{data.session.createdAt.toLocaleString()}</span>
 				<span>Session ended:</span>

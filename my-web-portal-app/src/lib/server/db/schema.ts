@@ -4,7 +4,9 @@ import { relations } from 'drizzle-orm';
 export const userTable = mysqlTable('user', {
 	id: int('id').primaryKey().autoincrement(),
 	createdAt: datetime('created_at').notNull(),
-	name: varchar('name', { length: 20 }).notNull(),
+	firstName: varchar('first_name', { length: 30 }).notNull(),
+	lastName: varchar('last_name', { length: 30 }).notNull(),
+	username: varchar('username', { length: 20 }).notNull(),
 	dateOfBirth: datetime('date_of_birth').notNull()
 });
 

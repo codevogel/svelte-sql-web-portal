@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import Card from '$lib/components/ui/views/card/Card.svelte';
 	import Table from '$lib/components/ui/views/tables/Table.svelte';
 	import type { User } from '$lib/server/db/schema';
@@ -8,9 +7,9 @@
 	let users: User[] | undefined = $derived(data.users);
 
 	let table = $derived({
-		columns: ['Name', 'Created At'],
+		columns: ['Username', 'Created At'],
 		rows: users?.map((user) => ({
-			values: [user.name, user.createdAt.toLocaleDateString()],
+			values: [user.username, user.createdAt.toLocaleDateString()],
 			url: `/dashboard/user/${user.id}`
 		}))
 	});
@@ -29,8 +28,8 @@
 		{/snippet}
 		{#snippet article()}
 			<form data-sveltekit-keepfocus>
-				<label for="name">Name: </label>
-				<input class="input" type="text" name="name" oninput={searchForUsersByName} />
+				<label for="username">Name: </label>
+				<input class="input" type="text" name="username" oninput={searchForUsersByName} />
 			</form>
 		{/snippet}
 	</Card>

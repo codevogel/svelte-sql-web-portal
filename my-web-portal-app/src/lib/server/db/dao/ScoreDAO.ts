@@ -17,7 +17,7 @@ export class ScoreDAO {
 		// Then find the score records that match these maximums
 		const result = await db
 			.select({
-				name: userTable.name,
+				username: userTable.username,
 				userId: userTable.id,
 				scoreId: scoreTable.id,
 				levelId: scoreTable.levelId,
@@ -48,14 +48,14 @@ export class ScoreDAO {
 	}
 }
 
-export class TopScore {
-	name: string = 'defaultName';
-	userId: number = NaN;
-	scoreId: number = NaN;
-	levelId: number = NaN;
-	sessionId: number = NaN;
-	score: number = NaN;
-	accuracy: number = NaN;
-	timeTaken: number = NaN;
-	createdAt: Date = new Date();
+export interface TopScore {
+	username: string;
+	userId: number;
+	scoreId: number;
+	levelId: number;
+	sessionId: number;
+	score: number;
+	accuracy: number;
+	timeTaken: number;
+	createdAt: Date;
 }

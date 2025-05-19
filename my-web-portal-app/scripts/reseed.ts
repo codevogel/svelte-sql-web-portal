@@ -18,29 +18,30 @@ async function reseed_db() {
 	await reset(db, schema);
 	console.log('Reseeding database...');
 	await seed(db, schema).refine((f) => ({
-		user: {
+		userTable: {
 			count: 20,
 			columns: {
-				name: f.firstName(),
+				firstName: f.firstName(),
+				lastName: f.lastName(),
 				createdAt: f.date({ minDate: '2025-01-01', maxDate: '2025-02-01' }),
 				dateOfBirth: f.date({ minDate: '1990-01-01', maxDate: '2000-01-01' })
 			}
 		},
-		session: {
+		sessionTable: {
 			count: 100,
 			columns: {
 				createdAt: f.date({ minDate: '2025-02-01', maxDate: '2025-03-01' }),
 				duration: f.int({ minValue: 0, maxValue: 2 * 60 * 60 })
 			}
 		},
-		level: {
+		levelTable: {
 			count: 10,
 			columns: {
 				name: f.city(),
 				difficulty: f.int({ minValue: 1, maxValue: 5 })
 			}
 		},
-		score: {
+		scoreTable: {
 			count: 300,
 			columns: {
 				score: f.int({ minValue: 0, maxValue: 2000 }),
@@ -50,6 +51,7 @@ async function reseed_db() {
 		}
 	}));
 
+	await setUsernames(db);
 	await setScoreCreatedAtAfterSessionCreatedAt(db);
 
 	console.log('Database reseeded successfully');
@@ -80,6 +82,18 @@ async function setScoreCreatedAtAfterSessionCreatedAt(db: MySql2Database<typeof 
 				})
 				.where(eq(schema.scoreTable.id, score.id));
 		}
+	}
+}
+
+async function setUsernames(db: MySql2Database<typeof schema> & { $client: mysql.Pool }) {
+	const users = await db.select().from(schema.userTable);
+	for (const user of users) {
+		await db
+			.update(schema.userTable)
+			.set({
+				username: faker.internet.username().slice(0, 20)
+			})
+			.where(eq(schema.userTable.id, user.id));
 	}
 }
 

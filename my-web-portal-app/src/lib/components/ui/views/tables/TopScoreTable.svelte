@@ -9,7 +9,7 @@
 			'A list of the top 10 users who have the highest scores.\nClick to view the session in which they achieved it.',
 		columns: [
 			'Ranking',
-			'Name',
+			'Username',
 			'Level ID',
 			'Score',
 			'Accuracy',
@@ -20,7 +20,7 @@
 		rows: topScores.map((score: TopScore, index: number) => ({
 			values: [
 				index + 1,
-				score.name,
+				score.username,
 				score.levelId,
 				score.score,
 				score.accuracy,

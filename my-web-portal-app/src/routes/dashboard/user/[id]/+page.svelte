@@ -20,8 +20,12 @@
 		{/snippet}
 		{#snippet article()}
 			<div class="grid grid-cols-2 justify-between">
-				<span>Name:</span>
-				<span>{user.name}</span>
+				<span>Username:</span>
+				<span>{user.username}</span>
+				<span>First Name:</span>
+				<span>{user.firstName}</span>
+				<span>Last Name:</span>
+				<span>{user.lastName}</span>
 				<span>Age:</span>
 				<span>{userAge}</span>
 				<span>User Since:</span>

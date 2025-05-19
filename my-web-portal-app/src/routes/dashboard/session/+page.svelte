@@ -8,7 +8,7 @@
 	let sessions: SessionWithUsername[] | undefined = $derived(data.sessions);
 
 	let table = $derived({
-		columns: ['ID', 'User'],
+		columns: ['ID', 'Username'],
 		rows: sessions?.map((session) => {
 			return {
 				values: [session.id, session.username],

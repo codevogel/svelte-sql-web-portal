@@ -8,10 +8,10 @@
 
 	const table: TableData = $derived({
 		caption: 'A list of users.\nClick to view their profile.',
-		columns: ['Name', 'Age', 'Created At'],
+		columns: ['Username', 'Age', 'Created At'],
 		rows: users.map((user: User) => ({
 			values: [
-				user.name,
+				user.username,
 				Math.abs(new Date(Date.now() - user.dateOfBirth.getTime()).getUTCFullYear() - 1970),
 				user.createdAt.toLocaleDateString()
 			],

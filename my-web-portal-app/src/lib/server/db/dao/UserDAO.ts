@@ -20,9 +20,9 @@ export class UserDAO {
 		return result;
 	}
 
-	static async getUsersLikeName(name: string): Promise<User[]> {
+	static async getUsersLikeUsername(username: string): Promise<User[]> {
 		const result: User[] = await db.query.userTable.findMany({
-			where: like(userTable.name, `%${name}%`)
+			where: like(userTable.username, `%${username}%`)
 		});
 		return result;
 	}

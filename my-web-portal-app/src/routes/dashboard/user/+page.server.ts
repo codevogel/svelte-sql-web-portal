@@ -4,10 +4,10 @@ import { UserDAO } from '$lib/server/db/dao/UserDAO';
 
 export const load: PageServerLoad = async ({ url }) => {
 	// Here we query the user data using our DAO and return it
-	const name = url.searchParams.get('name');
+	const username = url.searchParams.get('username');
 	let users: User[] = [];
-	if (name) {
-		users = await UserDAO.getUsersLikeName(name);
+	if (username) {
+		users = await UserDAO.getUsersLikeUsername(username);
 	}
 	return { users };
 };
