@@ -17,6 +17,16 @@ export const sessionTable = mysqlTable('session', {
 	duration: int('duration').notNull() // in seconds
 });
 
+export const authSessionTable = mysqlTable('auth_session', {
+	id: varchar('id', {
+		length: 255
+	}).primaryKey(),
+	userId: int('user_id')
+		.notNull()
+		.references(() => userTable.id),
+	expiresAt: datetime('expires_at').notNull()
+});
+
 export const scoreTable = mysqlTable('score', {
 	id: int('id').primaryKey().autoincrement(),
 	sessionId: int('session_id').notNull(),
@@ -68,5 +78,6 @@ export const levelRelations = relations(levelTable, ({ many }) => ({
 
 export type User = typeof userTable.$inferSelect;
 export type Session = typeof sessionTable.$inferSelect;
+export type AuthSession = typeof authSessionTable.$inferSelect;
 export type Score = typeof scoreTable.$inferSelect;
 export type Level = typeof levelTable.$inferSelect;
