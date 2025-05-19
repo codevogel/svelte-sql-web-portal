@@ -61,24 +61,24 @@ async function main() {
 }
 
 async function setScoreCreatedAtAfterSessionCreatedAt(db: MySql2Database<typeof schema>) {
-	const sessions = await db.select().from(schema.session);
+	const sessions = await db.select().from(schema.sessionTable);
 	for (const session of sessions) {
 		const sessionStart = session.createdAt;
 		const sessionEnd = new Date(sessionStart.getTime() + session.duration * 1000);
-		const sessionScores = await db.query.score.findMany({
-			where: eq(schema.score.sessionId, session.id)
+		const sessionScores = await db.query.scoreTable.findMany({
+			where: eq(schema.scoreTable.sessionId, session.id)
 		});
 
 		for (const score of sessionScores) {
 			await db
-				.update(schema.score)
+				.update(schema.scoreTable)
 				.set({
 					createdAt: faker.date.between({
 						from: sessionStart,
 						to: sessionEnd
 					})
 				})
-				.where(eq(schema.score.id, score.id));
+				.where(eq(schema.scoreTable.id, score.id));
 		}
 	}
 }

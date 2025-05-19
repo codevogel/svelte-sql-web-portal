@@ -1,48 +1,48 @@
 import { db } from '$lib/server/db';
-import { user, session, score, type Score } from '$lib/server/db/schema';
+import { userTable, sessionTable, scoreTable, type Score } from '$lib/server/db/schema';
 import { sql, eq, desc } from 'drizzle-orm';
 
 export class ScoreDAO {
 	static async getTopScorers(): Promise<TopScore[]> {
 		const maxScoreSubquery = db
 			.select({
-				userId: session.userId,
-				maxScore: sql<number>`MAX(${score.score})`.as('max_score')
+				userId: sessionTable.userId,
+				maxScore: sql<number>`MAX(${scoreTable.score})`.as('max_score')
 			})
-			.from(score)
-			.innerJoin(session, eq(score.sessionId, session.id))
-			.groupBy(session.userId)
+			.from(scoreTable)
+			.innerJoin(sessionTable, eq(scoreTable.sessionId, sessionTable.id))
+			.groupBy(sessionTable.userId)
 			.as('max_scores');
 
 		// Then find the score records that match these maximums
 		const result = await db
 			.select({
-				name: user.name,
-				userId: user.id,
-				scoreId: score.id,
-				levelId: score.levelId,
-				sessionId: score.sessionId,
-				score: score.score,
-				accuracy: score.accuracy,
-				timeTaken: score.timeTaken,
-				createdAt: score.createdAt
+				name: userTable.name,
+				userId: userTable.id,
+				scoreId: scoreTable.id,
+				levelId: scoreTable.levelId,
+				sessionId: scoreTable.sessionId,
+				score: scoreTable.score,
+				accuracy: scoreTable.accuracy,
+				timeTaken: scoreTable.timeTaken,
+				createdAt: scoreTable.createdAt
 			})
-			.from(user)
-			.innerJoin(maxScoreSubquery, eq(maxScoreSubquery.userId, user.id))
-			.innerJoin(session, eq(session.userId, user.id))
+			.from(userTable)
+			.innerJoin(maxScoreSubquery, eq(maxScoreSubquery.userId, userTable.id))
+			.innerJoin(sessionTable, eq(sessionTable.userId, userTable.id))
 			.innerJoin(
-				score,
-				sql`${score.sessionId} = ${session.id} AND ${score.score} = ${maxScoreSubquery.maxScore}`
+				scoreTable,
+				sql`${scoreTable.sessionId} = ${sessionTable.id} AND ${scoreTable.score} = ${maxScoreSubquery.maxScore}`
 			)
-			.orderBy(desc(score.score))
+			.orderBy(desc(scoreTable.score))
 			.limit(10);
 
 		return result;
 	}
 
 	static async getScoresBySessionId(sessionId: number): Promise<Score[]> {
-		const scores: Score[] = await db.query.score.findMany({
-			where: eq(score.sessionId, sessionId)
+		const scores: Score[] = await db.query.scoreTable.findMany({
+			where: eq(scoreTable.sessionId, sessionId)
 		});
 		return scores;
 	}

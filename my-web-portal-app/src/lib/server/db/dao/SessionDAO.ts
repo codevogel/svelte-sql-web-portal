@@ -1,46 +1,46 @@
 import { db } from '$lib/server/db';
-import { session, type Session, score, user } from '$lib/server/db/schema';
+import { sessionTable, type Session, scoreTable, userTable } from '$lib/server/db/schema';
 import { eq, like, sql } from 'drizzle-orm';
 
 export class SessionDAO {
 	static async getSessionById(id: number): Promise<Session> {
 		// Drizzle ORM query to select all users
-		const sesh: Session | undefined = await db.query.session.findFirst({
-			where: eq(session.id, id)
+		const session: Session | undefined = await db.query.sessionTable.findFirst({
+			where: eq(sessionTable.id, id)
 		});
-		if (!sesh) {
+		if (!session) {
 			throw new Error(`Session with id ${id} not found`);
 		}
-		return sesh;
+		return session;
 	}
 
 	static async getSessionsLikeId(id: number): Promise<SessionWithUsername[]> {
 		const result: SessionWithUsername[] = await db
 			.select({
-				id: session.id,
-				userId: session.userId,
-				createdAt: session.createdAt,
-				duration: session.duration,
-				username: user.name
+				id: sessionTable.id,
+				userId: sessionTable.userId,
+				createdAt: sessionTable.createdAt,
+				duration: sessionTable.duration,
+				username: userTable.name
 			})
-			.from(session)
-			.innerJoin(user, eq(session.userId, user.id))
-			.where(like(session.id, `${id}%`));
+			.from(sessionTable)
+			.innerJoin(userTable, eq(sessionTable.userId, userTable.id))
+			.where(like(sessionTable.id, `${id}%`));
 		return result;
 	}
 
 	static async getSessionsLikeUserName(name: string): Promise<SessionWithUsername[]> {
 		const result: SessionWithUsername[] = await db
 			.select({
-				id: session.id,
-				userId: session.userId,
-				createdAt: session.createdAt,
-				duration: session.duration,
-				username: user.name
+				id: sessionTable.id,
+				userId: sessionTable.userId,
+				createdAt: sessionTable.createdAt,
+				duration: sessionTable.duration,
+				username: userTable.name
 			})
-			.from(session)
-			.innerJoin(user, eq(session.userId, user.id))
-			.where(like(user.name, `%${name}%`));
+			.from(sessionTable)
+			.innerJoin(userTable, eq(sessionTable.userId, userTable.id))
+			.where(like(userTable.name, `%${name}%`));
 		return result;
 	}
 
@@ -50,16 +50,16 @@ export class SessionDAO {
 		// Use SQL.js to perform a JOIN with aggregation
 		const result = await db
 			.select({
-				id: session.id,
-				userId: session.userId,
-				createdAt: session.createdAt,
-				duration: session.duration,
-				averageScore: sql<number>`AVG(${score.score})`.mapWith(Number)
+				id: sessionTable.id,
+				userId: sessionTable.userId,
+				createdAt: sessionTable.createdAt,
+				duration: sessionTable.duration,
+				averageScore: sql<number>`AVG(${scoreTable.score})`.mapWith(Number)
 			})
-			.from(session)
-			.leftJoin(score, eq(session.id, score.sessionId))
-			.where(eq(session.userId, userId))
-			.groupBy(session.id);
+			.from(sessionTable)
+			.leftJoin(scoreTable, eq(sessionTable.id, scoreTable.sessionId))
+			.where(eq(sessionTable.userId, userId))
+			.groupBy(sessionTable.id);
 
 		// Return the typed results
 		return result.map((session) => ({
