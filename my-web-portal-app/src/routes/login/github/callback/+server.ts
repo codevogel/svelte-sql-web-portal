@@ -11,6 +11,8 @@ import { github } from '$lib/server/db/auth/oauth';
 import type { RequestEvent } from '@sveltejs/kit';
 import type { OAuth2Tokens } from 'arctic';
 
+import { ALLOWED_GITHUB_IDS } from '$env/static/private';
+
 export async function GET(event: RequestEvent): Promise<Response> {
 	const code = event.url.searchParams.get('code');
 	const state = event.url.searchParams.get('state');
@@ -29,7 +31,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	let tokens: OAuth2Tokens;
 	try {
 		tokens = await github.validateAuthorizationCode(code);
-	} catch {
+	} catch (e) {
+		console.log('Error validating authorization code:', e);
 		// Invalid code or client credentials
 		return new Response(null, {
 			status: 400
@@ -55,8 +58,28 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				Location: '/'
 			}
 		});
-	} catch {
-		// TODO: Replace this with your own DB query.
+	} catch (e) {
+		console.log('Error fetching admin:', e);
+		console.log('Creating new admin...');
+		const allowedIds = ALLOWED_GITHUB_IDS.split(',');
+		let allowed = false;
+		for (const id of allowedIds) {
+			if (id.trim() === githubUserId.toString()) {
+				allowed = true;
+				break;
+			}
+		}
+
+		if (!allowed) {
+			console.log('User was not allowed to create an admin account, as they are not in the whitelist.');
+			return new Response(null, {
+				status: 302,
+				headers: {
+					Location: '/unauthorized'
+				}
+			});
+		}
+
 		const admin = await AdminDAO.createAdmin(githubUserId, githubUsername);
 
 		const sessionToken = generateSessionToken();
