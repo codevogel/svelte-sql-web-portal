@@ -3,12 +3,17 @@ import { relations } from 'drizzle-orm';
 
 export const userTable = mysqlTable('user', {
 	id: int('id').primaryKey().autoincrement(),
-	githubId: int('github_id').unique(),
 	createdAt: datetime('created_at').notNull(),
 	firstName: varchar('first_name', { length: 30 }).notNull(),
 	lastName: varchar('last_name', { length: 30 }).notNull(),
-	username: varchar('username', { length: 39 }).notNull(), // Github usernames may not exceed 39 chars
+	username: varchar('username', { length: 20 }).notNull(),
 	dateOfBirth: datetime('date_of_birth').notNull()
+});
+
+export const adminTable = mysqlTable('admin', {
+	id: int('id').primaryKey().autoincrement(),
+	githubId: int('github_id').unique(),
+	username: varchar('username', { length: 39 }).unique().notNull()
 });
 
 export const sessionTable = mysqlTable('session', {
@@ -22,9 +27,9 @@ export const authSessionTable = mysqlTable('auth_session', {
 	id: varchar('id', {
 		length: 255
 	}).primaryKey(),
-	userId: int('user_id')
+	adminId: int('admin_id')
 		.notNull()
-		.references(() => userTable.id),
+		.references(() => adminTable.id),
 	expiresAt: datetime('expires_at').notNull()
 });
 
@@ -78,6 +83,7 @@ export const levelRelations = relations(levelTable, ({ many }) => ({
 }));
 
 export type User = typeof userTable.$inferSelect;
+export type Admin = typeof adminTable.$inferSelect;
 export type Session = typeof sessionTable.$inferSelect;
 export type AuthSession = typeof authSessionTable.$inferSelect;
 export type Score = typeof scoreTable.$inferSelect;

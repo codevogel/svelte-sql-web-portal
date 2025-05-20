@@ -1,4 +1,4 @@
-import type { User, AuthSession } from '$lib/server/db/schema';
+import type { Admin, AuthSession } from '$lib/server/db/schema';
 
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
@@ -6,7 +6,7 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user: User | null;
+			admin: Admin | null;
 			authSession: AuthSession | null;
 		}
 		// interface PageData {}

@@ -1,11 +1,11 @@
 import { db } from '$lib/server/db';
-import { userTable, authSessionTable } from '$lib/server/db/schema';
+import { adminTable, authSessionTable } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '@oslojs/encoding';
 import { sha256 } from '@oslojs/crypto/sha2';
 
 import type { RequestEvent } from '@sveltejs/kit';
-import type { User, AuthSession } from '$lib/server/db/schema';
+import type { Admin, AuthSession } from '$lib/server/db/schema';
 
 export function generateSessionToken(): string {
 	const bytes = new Uint8Array(20);
@@ -14,11 +14,11 @@ export function generateSessionToken(): string {
 	return token;
 }
 
-export async function createSession(token: string, userId: number): Promise<AuthSession> {
+export async function createSession(token: string, adminId: number): Promise<AuthSession> {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const session: AuthSession = {
 		id: sessionId,
-		userId,
+		adminId: adminId,
 		expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
 	};
 	await db.insert(authSessionTable).values(session);
@@ -28,36 +28,36 @@ export async function createSession(token: string, userId: number): Promise<Auth
 export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const result = await db
-		.select({ user: userTable, session: authSessionTable })
+		.select({ admin: adminTable, authSession: authSessionTable })
 		.from(authSessionTable)
-		.innerJoin(userTable, eq(authSessionTable.userId, userTable.id))
+		.innerJoin(adminTable, eq(authSessionTable.adminId, adminTable.id))
 		.where(eq(authSessionTable.id, sessionId));
 	if (result.length < 1) {
-		return { session: null, user: null };
+		return { authSession: null, admin: null };
 	}
-	const { user, session } = result[0];
-	if (Date.now() >= session.expiresAt.getTime()) {
-		await db.delete(authSessionTable).where(eq(authSessionTable.id, session.id));
-		return { session: null, user: null };
+	const { admin, authSession } = result[0];
+	if (Date.now() >= authSession.expiresAt.getTime()) {
+		await db.delete(authSessionTable).where(eq(authSessionTable.id, authSession.id));
+		return { authSession: null, admin: null };
 	}
-	if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
-		session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+	if (Date.now() >= authSession.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
+		authSession.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
 		await db
 			.update(authSessionTable)
 			.set({
-				expiresAt: session.expiresAt
+				expiresAt: authSession.expiresAt
 			})
-			.where(eq(authSessionTable.id, session.id));
+			.where(eq(authSessionTable.id, authSession.id));
 	}
-	return { session, user };
+	return { authSession, admin };
 }
 
 export async function invalidateSession(sessionId: string): Promise<void> {
 	await db.delete(authSessionTable).where(eq(authSessionTable.id, sessionId));
 }
 
-export async function invalidateAllSessions(userId: number): Promise<void> {
-	await db.delete(authSessionTable).where(eq(authSessionTable.userId, userId));
+export async function invalidateAllSessions(adminId: number): Promise<void> {
+	await db.delete(authSessionTable).where(eq(authSessionTable.adminId, adminId));
 }
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date): void {
@@ -79,5 +79,5 @@ export function deleteSessionTokenCookie(event: RequestEvent): void {
 }
 
 export type SessionValidationResult =
-	| { session: AuthSession; user: User }
-	| { session: null; user: null };
+	| { authSession: AuthSession; admin: Admin }
+	| { authSession: null; admin: null };
