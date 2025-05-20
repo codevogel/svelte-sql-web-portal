@@ -3,10 +3,11 @@ import { relations } from 'drizzle-orm';
 
 export const userTable = mysqlTable('user', {
 	id: int('id').primaryKey().autoincrement(),
+	githubId: int('github_id').unique(),
 	createdAt: datetime('created_at').notNull(),
 	firstName: varchar('first_name', { length: 30 }).notNull(),
 	lastName: varchar('last_name', { length: 30 }).notNull(),
-	username: varchar('username', { length: 20 }).notNull(),
+	username: varchar('username', { length: 39 }).notNull(), // Github usernames may not exceed 39 chars
 	dateOfBirth: datetime('date_of_birth').notNull()
 });
 
