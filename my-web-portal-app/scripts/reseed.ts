@@ -51,6 +51,7 @@ async function reseed_db() {
 		}
 	}));
 
+	await clearAuthTables(db);
 	await setUsernames(db);
 	await setScoreCreatedAtAfterSessionCreatedAt(db);
 
@@ -95,6 +96,11 @@ async function setUsernames(db: MySql2Database<typeof schema> & { $client: mysql
 			})
 			.where(eq(schema.userTable.id, user.id));
 	}
+}
+
+async function clearAuthTables(db: MySql2Database<typeof schema> & { $client: mysql.Pool }) {
+	await db.delete(schema.authSessionTable);
+	await db.delete(schema.adminTable);
 }
 
 main();
