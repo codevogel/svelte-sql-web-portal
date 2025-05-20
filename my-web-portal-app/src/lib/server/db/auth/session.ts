@@ -1,11 +1,11 @@
-import { db } from "$lib/server/db";
-import { userTable, authSessionTable } from "$lib/server/db/schema";
-import { eq } from "drizzle-orm";
-import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
-import { sha256 } from "@oslojs/crypto/sha2";
+import { db } from '$lib/server/db';
+import { userTable, authSessionTable } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
+import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '@oslojs/encoding';
+import { sha256 } from '@oslojs/crypto/sha2';
 
-import type { RequestEvent } from "@sveltejs/kit";
-import type { User, AuthSession } from "$lib/server/db/schema"
+import type { RequestEvent } from '@sveltejs/kit';
+import type { User, AuthSession } from '$lib/server/db/schema';
 
 export function generateSessionToken(): string {
 	const bytes = new Uint8Array(20);
@@ -18,7 +18,8 @@ export async function createSession(token: string, userId: number): Promise<Auth
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const session: AuthSession = {
 		id: sessionId,
-		userId, expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
+		userId,
+		expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
 	};
 	await db.insert(authSessionTable).values(session);
 	return session;
@@ -59,22 +60,21 @@ export async function invalidateAllSessions(userId: number): Promise<void> {
 	await db.delete(authSessionTable).where(eq(authSessionTable.userId, userId));
 }
 
-
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date): void {
-	event.cookies.set("session", token, {
+	event.cookies.set('authSession', token, {
 		httpOnly: true,
-		sameSite: "lax",
+		sameSite: 'lax',
 		expires: expiresAt,
-		path: "/"
+		path: '/'
 	});
 }
 
 export function deleteSessionTokenCookie(event: RequestEvent): void {
-	event.cookies.set("session", "", {
+	event.cookies.set('authSession', '', {
 		httpOnly: true,
-		sameSite: "lax",
+		sameSite: 'lax',
 		maxAge: 0,
-		path: "/"
+		path: '/'
 	});
 }
 
