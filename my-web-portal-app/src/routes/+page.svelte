@@ -25,8 +25,7 @@
 			</p>
 		{/snippet}
 		{#snippet footer()}
-			<button class="btn preset-filled-primary-500" onclick={() => goto('/login')}>Log In</button>
-			<button class="btn preset-filled-primary-500">Register</button>
+			<button class="btn preset-filled-primary-500" onclick={() => goto('/login')}>Log in</button>
 		{/snippet}
 	</Card>
 	<div class="hidden lg:block">
