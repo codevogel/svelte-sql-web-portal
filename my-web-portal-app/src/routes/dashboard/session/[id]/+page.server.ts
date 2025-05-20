@@ -3,8 +3,13 @@ import { SessionDAO } from '$lib/server/db/dao/SessionDAO';
 import type { Score, Session, User } from '$lib/server/db/schema';
 import { ScoreDAO } from '$lib/server/db/dao/ScoreDAO';
 import { UserDAO } from '$lib/server/db/dao/UserDAO';
+import { redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
+	if (!locals.admin) {
+		return redirect(302, '/login');
+	}
+
 	// Here we query the user data using our DAO and return it
 	if (!params.id || isNaN(Number(params.id))) {
 		throw new Error('Session ID is required');

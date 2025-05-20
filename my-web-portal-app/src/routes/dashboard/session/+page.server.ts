@@ -1,7 +1,12 @@
 import type { PageServerLoad } from './$types';
 import { SessionDAO, type SessionWithUsername } from '$lib/server/db/dao/SessionDAO';
+import { redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ url }) => {
+export const load: PageServerLoad = async ({ url, locals }) => {
+	if (!locals.admin) {
+		return redirect(302, '/login');
+	}
+
 	let sessions: SessionWithUsername[] = [];
 	const userNameParam = url.searchParams.get('username');
 	if (userNameParam) {
