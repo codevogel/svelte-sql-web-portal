@@ -3,10 +3,9 @@ import { deleteSessionTokenCookie, invalidateSession } from '$lib/server/db/auth
 import { fail, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const data = {
+	return {
 		loggedIn: locals.admin ? true : false
 	};
-	return data;
 };
 
 export const actions: Actions = {
