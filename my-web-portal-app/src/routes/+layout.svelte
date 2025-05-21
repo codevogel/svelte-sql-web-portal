@@ -1,14 +1,15 @@
 <script lang="ts">
 	import '../app.css';
 	import NavBar from '$lib/components/ui/nav/NavBar.svelte';
+	import type { LayoutProps } from './$types';
 
-	let { children } = $props();
+	let { data, children }: LayoutProps = $props();
 </script>
 
 <div class="grid min-h-screen grid-rows-[auto_1fr_auto]">
 	<!-- Header -->
 	<header>
-		<NavBar />
+		<NavBar loggedIn={data.loggedIn} />
 	</header>
 	<!-- Page -->
 	<div class="mx-auto grid w-full grid-cols-1">

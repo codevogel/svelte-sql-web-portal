@@ -6,6 +6,7 @@
 	import { pages, type Page } from '$lib/stores/navigation';
 
 	import ThemeSwitch from '$lib/components/ui/theme/ThemeSwitch.svelte';
+	import { enhance } from '$app/forms';
 
 	let drawerState = $state(false);
 
@@ -21,6 +22,8 @@
 		goto(path);
 		drawerClose();
 	}
+
+	let { loggedIn } = $props();
 </script>
 
 <div class="align-items-center bg-primary-200-800 grid h-[var(--h-navbar)] w-full grid-cols-5 p-4">
@@ -93,6 +96,14 @@
 		</span>
 	</div>
 	<div class="col-span-1 flex items-center justify-end">
+		{#if loggedIn}
+			<form method="post" action="/" use:enhance>
+				<button class="btn preset-filled-primary-500">Sign out</button>
+			</form>
+		{/if}
+		{#if !loggedIn}
+			<button class="btn preset-filled-primary-500" onclick={() => goto('/login')}> Log in </button>
+		{/if}
 		<ThemeSwitch />
 	</div>
 </div>
