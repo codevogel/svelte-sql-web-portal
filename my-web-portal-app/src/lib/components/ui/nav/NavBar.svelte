@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Modal } from '@skeletonlabs/skeleton-svelte';
-	import { ArrowLeft, DatabaseZap, Menu } from 'lucide-svelte';
+	import { ArrowLeft, DatabaseZap, LogIn, LogOut, Menu } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 
 	import { pages, type Page } from '$lib/stores/navigation';
@@ -63,6 +63,32 @@
 						</button>
 						{#if index < $pages.length - 1}{/if}
 					{/each}
+
+					<hr class="hr my-2" />
+
+					{#if loggedIn}
+						<form method="post" action="/" use:enhance={drawerClose} class="min-w-full">
+							<button class="btn preset-filled-primary-500 mt-4 ml-4">
+								<span class="flex w-full items-center gap-x-2">
+									<LogOut />
+									Sign out
+								</span>
+							</button>
+						</form>
+					{:else}
+						<button
+							class="btn preset-filled-primary-500 mt-4 ml-4 max-w-[fit-content]"
+							onclick={() => {
+								drawerClose();
+								goto('/login');
+							}}
+						>
+							<span class="flex items-center gap-x-2">
+								<LogIn />
+								Log in
+							</span>
+						</button>
+					{/if}
 				</article>
 			{/snippet}
 		</Modal>
@@ -82,7 +108,7 @@
 			>
 		</button>
 		<span class="hidden md:flex md:justify-center">
-			{#each $pages as page, index (page.name)}
+			{#each $pages as page (page.name)}
 				<button
 					class="btn hover:preset-tonal h5 justify-start"
 					onclick={() => onNavItemClick(page)}
@@ -91,18 +117,26 @@
 						{page.name}
 					</h5>
 				</button>
-				{#if index < $pages.length - 1}{/if}
 			{/each}
 		</span>
 	</div>
 	<div class="col-span-1 flex items-center justify-end">
 		{#if loggedIn}
-			<form method="post" action="/" use:enhance>
-				<button class="btn preset-filled-primary-500">Sign out</button>
+			<form method="post" action="/" use:enhance class="hidden md:block">
+				<button class="btn hover:preset-tonal-surface">
+					<span class="flex items-center gap-x-2">
+						<LogOut />
+						Log out
+					</span>
+				</button>
 			</form>
-		{/if}
-		{#if !loggedIn}
-			<button class="btn preset-filled-primary-500" onclick={() => goto('/login')}> Log in </button>
+		{:else}
+			<button class="btn hover:preset-tonal-surface hidden md:block" onclick={() => goto('/login')}>
+				<span class="flex items-center gap-x-2">
+					<LogIn />
+					Log in
+				</span>
+			</button>
 		{/if}
 		<ThemeSwitch />
 	</div>
